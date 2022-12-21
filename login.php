@@ -13,26 +13,26 @@ session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login Page</title>
 </head>
 <body>
 <div class="bg-img">
         <div class="content">
             <header>Login Here</header>
             <form name="data" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
-           
-
-             
-
                 <div class="field space">
                     <span class="fa-solid fa-envelope"></span>
-                    <input type="text" required name="s_email" placeholder="Email Address" value="<?php if(isset($_COOKIE['emailcookie'])) {echo $_COOKIE['emailcookie'] ;}  ?>">
+                    <input type="text" required name="s_email" placeholder="Email Address" value="<?php if (isset($_COOKIE['emailcookie'])) {
+                        echo $_COOKIE['emailcookie'] ;
+                    }  ?>">
                 </div>
 
                
                 <div class="field space">
                     <span class="fa fa-lock"></span>
-                    <input type="password" class="password" required placeholder="Password" name="s_password" value="<?php if(isset($_COOKIE['passwordcookie'])) {echo $_COOKIE['passwordcookie'] ;} ?>">
+                    <input type="password" class="password" required placeholder="Password" name="s_password" value="<?php if (isset($_COOKIE['passwordcookie'])) {
+                        echo $_COOKIE['passwordcookie'] ;
+                    } ?>">
                 </div>
                 <br>
                 <div class="form-group signup ">
@@ -40,56 +40,51 @@ session_start();
                 </div>
 
                 <?php
-                 if(isset($_POST['submit'])){
-                    $email = $_POST['s_email'];
-                    $password = $_POST['s_password'];
+                 if (isset($_POST['submit'])) {
+                     $email = $_POST['s_email'];
+                     $password = $_POST['s_password'];
 
-                    $email_search = "select * from s_registration where s_email = '$email' ";
-                    $email_query = mysqli_query($con, $email_search);
+                     $email_search = "select * from s_registration where s_email = '$email' ";
+                     $email_query = mysqli_query($con, $email_search);
 
-                    $email_count = mysqli_num_rows($email_query);
-                    if ($email_count){
-                        $email_pass = mysqli_fetch_assoc($email_query);
-                        $db_pass = $email_pass['s_password'];
+                     $email_count = mysqli_num_rows($email_query);
+                     if ($email_count) {
+                         $email_pass = mysqli_fetch_assoc($email_query);
+                         $db_pass = $email_pass['s_password'];
 
-                        // to fetch username with the help of session it will display username
-                        // to the other page
-                        $_SESSION ['s_name'] = $email_pass['s_name'];
+                         // to fetch username with the help of session it will display username
+                         // to the other page
+                         $_SESSION ['s_name'] = $email_pass['s_name'];
 
-                        $pass_decode = password_verify($password, $db_pass);
+                         $pass_decode = password_verify($password, $db_pass);
 
-                        if($pass_decode){
-                            if (isset($_POST['rememberme']))  {
-
-                                setcookie('emailcookie',$email,time()+86400);
-                                setcookie('passwordcookie',$password,time()+86400);
-                                header('location:insert.php');
-
-                             }else{
-                                header('location:insert.php');
-                             }  
-
-                        }else{
-                            ?>
+                         if ($pass_decode) {
+                             if (isset($_POST['rememberme'])) {
+                                 setcookie('emailcookie', $email, time()+86400);
+                                 setcookie('passwordcookie', $password, time()+86400);
+                                 header('location:insert.php');
+                             } else {
+                                 header('location:insert.php');
+                             }
+                         } else {
+                             ?>
                                  <script>
                                     alert("Password Incorrect");
                                  </script>
                             <?php
-                        
-                         
-                        }
-                    }else{
 
-                        ?>
+                         }
+                     } else {
+                         ?>
                         <script>
                            alert("Email Not Registered");
                         </script>
                    <?php
-                    }
+                     }
                  }
-                
-                
-                ?>
+
+
+?>
 
                 <div class="pass">
                     <a href="recover_email.php">Forgot Password?</a>
